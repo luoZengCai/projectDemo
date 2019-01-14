@@ -3,11 +3,27 @@
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>|
-      <router-link to="/login">Login</router-link>
+      <router-link to="/login" v-if="!isLogin">Login</router-link>
+      <a v-else @click="logout">Logout</a>
     </div>
     <router-view/>
   </div>
 </template>
+
+<script>
+import { mapGetters } from 'vuex';
+export default {
+  methods: {
+    logout() {
+      this.$http.get('/api/logout')
+    }
+  },
+  computed: {
+    ...mapGetters(['isLogin'])
+  },
+}
+</script>
+
 
 <style>
 #app {

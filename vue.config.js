@@ -18,6 +18,18 @@ module.exports = {
   configureWebpack: {
     devServer: {
       before(app) {
+        app.use(function(req,res,next){
+          if (/^\/api/.test(req.path)) {//只判断请求接口
+            if (req.path == '/api/login' || req.headers.token) {
+              next()
+            } else {
+              res.sendStatus(401)
+            }
+          } else {
+            next()
+          }
+        })
+
         app.get('/api/goods',function(req,res){
           res.json({
             code: 0,
@@ -34,12 +46,19 @@ module.exports = {
         })
 
         
+        app.get('/api/logout',function(req,res){
+          res.json({
+            code: -1
+          })
+        })
+
         app.get('/api/login',function(req,res){
           const {username , password} = req.query
-          if (username === '123' && password === '123') {
+          if (username == 'admin' && password == 'yddkt123') {
+            let token = new Date().getTime() + 7*24*3600*1000
             res.json({
               code: 0,
-              token: '999'
+              token: token
             })
           } else {
             res.json({

@@ -13,6 +13,9 @@ export default {
   name: 'home',
   components: {
     HelloWorld
+  },
+  created () {
+    this.$http.get('/api/goods')
   }
 }
 </script>

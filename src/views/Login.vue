@@ -75,7 +75,6 @@
                     const {redirect} = this.$route.query
                     this.$router.push(redirect || '/')
                 } else {
-                    alert('登陆失败')
                     const toast = this.$createToast({
                         time: 2000,
                         txt: message || '登陆失败',
@@ -85,7 +84,7 @@
                 }
             },
             handleValidate(ret) {
-                console.log(ret)
+                // console.log(ret)
             },
         },
     }
