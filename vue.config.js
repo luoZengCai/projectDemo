@@ -21,18 +21,15 @@ module.exports = {
         app.get('/api/goods',function(req,res){
           res.json({
             code: 0,
-            list: [
-              {
+            list: [{
                 id:1,
                 text: '123',
                 price: 100
-              },
-              {
+              },{
                 id:1,
                 text: '456',
                 price: 200
-              }
-            ]
+              }]
           })
         })
 
