@@ -32,11 +32,9 @@ module.exports = {
             next()
           }
         })
-        //安装post body解析器
-        app.use(bodyParser.urlencoded({extended:true}))
 
         app.get('/api/goods',function(req,res){
-          const { id, foo } = req.query
+          const { id, foo} = req.query
           console.log(id,foo)
           res.json({
             code: 0,
@@ -59,9 +57,17 @@ module.exports = {
           })
         })
 
+        
+        //安装post body解析器
+        app.use(bodyParser.urlencoded({extended:true}))
+        // use bodyParser-json
+        app.use(bodyParser.json())
+        // use bodyParser-text
+        // app.use(bodyParser.text({type:"txt"}))
+
         app.post('/api/login',function(req,res){
           console.log(req.body)
-          const { username, password } = req.body
+          const {username , password} = req.body
           if (username == 'admin' && password == 'yddkt123') {
             let token = new Date().getTime() + 7*24*3600*1000
             res.json({
@@ -71,7 +77,7 @@ module.exports = {
           } else {
             res.json({
               code: 1,
-              message: '您登录失败了啊'
+              message: '登陆失败'
             })
           }
         })

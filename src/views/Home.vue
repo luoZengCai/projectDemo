@@ -15,7 +15,12 @@ export default {
     HelloWorld
   },
   created () {
-    this.$http.get('/api/goods')
+    this.$http.get('/api/goods',{
+      params: {
+        id: 1,
+        foo: 'bar'
+      }
+    })
   }
 }
 </script>

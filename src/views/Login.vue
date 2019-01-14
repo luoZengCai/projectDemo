@@ -1,6 +1,5 @@
 <template>
     <div>
-        <p>login</p>
         <cube-form :model='model'
             :schema='schema'
             @submit="handleSubmit"
@@ -61,14 +60,14 @@
         methods: {
             async handleSubmit(e) {
                 e.preventDefault()
-                console.log('登陆')
-                
-                const res = await this.$http.get('/api/login',{params:{
+
+                const res = await this.$http.post('/api/login',{
                     username: this.model.username,
                     password: this.model.password
-                }})
+                })
 
                 const {code,token,message} = res.data
+
                 if (code == 0) {
                     localStorage.setItem('token',token)
                     this.$store.commit('setToken',token)
@@ -84,7 +83,7 @@
                 }
             },
             handleValidate(ret) {
-                // console.log(ret)
+                let a = JSON.stringify(ret)
             },
         },
     }
