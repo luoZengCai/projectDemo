@@ -91,8 +91,9 @@ export default {
   position: absolute;
   left: 0;
   top: 0;
+  bottom: 47px;
   width: 100%;
-  padding-bottom: 36px;
+  padding-bottom: 47px;
 }
 span.badge {
   display: inline-block;
