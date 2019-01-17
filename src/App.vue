@@ -2,13 +2,16 @@
   <div id="app">
     <transition name="route-move">
       <router-view class="child-view"/>
-    </transition> 
-    <cube-tab-bar
-      showSlider
-      v-model="selectedLabelDefault"
-      :data="tabs"
-      @change="changeHandler"
-    ></cube-tab-bar>
+    </transition>
+    <!-- <cube-tab-bar showSlider v-model="selectedLabelDefault" @change="changeHandler" :data="tabs">
+    </cube-tab-bar> -->
+    <cube-tab-bar showSlider v-model="selectedLabelDefault" @change="changeHandler">
+      <cube-tab v-for="item in tabs" :key="item.label" :label="item.label" :value="item.value">
+        <i slot="icon" :class="item.icon"></i>
+        <div>{{item.label}}</div>
+        <span class="badge" v-if="showBadge(item.label)">{{cartTotal}}</span>
+      </cube-tab>
+    </cube-tab-bar>
   </div>
 </template>
 
@@ -17,45 +20,52 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      selectedLabelDefault: '/',
-      tabs: [{
-        value: '/',
-        label: 'Home',
-        icon: 'cubeic-home'
-      }, {
-        value: '/cart',
-        label: 'Cart',
-        icon: 'cubeic-mall'
-      }, {
-        value: '/login',
-        label: 'Me',
-        icon: 'cubeic-person'
-      }]
-    }
+      selectedLabelDefault: "/",
+      tabs: [
+        {
+          value: "/",
+          label: "Home",
+          icon: "cubeic-home"
+        },
+        {
+          value: "/cart",
+          label: "Cart",
+          icon: "cubeic-mall"
+        },
+        {
+          value: "/login",
+          label: "Me",
+          icon: "cubeic-person"
+        }
+      ]
+    };
   },
   watch: {
-    $route(router){
-      this.selectedLabelDefault = router.path
+    $route(router) {
+      this.selectedLabelDefault = router.path;
     }
   },
-  created(){
-    this.selectedLabelDefault = this.$route.path
+  created() {
+    this.selectedLabelDefault = this.$route.path;
   },
   methods: {
     logout() {
-      this.$http.get("/api/logout")
+      this.$http.get("/api/logout");
     },
-    changeHandler(val){
-      this.$router.push(val)
+    changeHandler(val) {
+      this.$router.push(val);
+    },
+    showBadge(label) {
+      return label == "Cart" && this.cartTotal > 0;
     }
   },
   computed: {
-    ...mapGetters(["isLogin"])
+    ...mapGetters(["isLogin", "cartTotal"])
   }
 };
 </script>
 
-<style scoped>
+<style style="stylus" scoped>
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -64,7 +74,7 @@ export default {
   color: #2c3e50;
 }
 
-.cube-tab-bar{
+.cube-tab-bar {
   position: fixed;
   bottom: 0;
   left: 0;
@@ -93,14 +103,22 @@ export default {
   top: 0;
   bottom: 47px;
   width: 100%;
-  padding-bottom: 47px;
+  overflow: auto;
+}
+.cube-tab {
+  position: relative;
 }
 span.badge {
   display: inline-block;
   background: #de3529;
+  font-size: 0.6rem;
   color: white;
-  width: 1rem;
+  padding: 0 0.2rem;
   height: 1rem;
-  border-radius: 50%;
+  line-height: 1rem;
+  border-radius: 0.3rem;
+  position: absolute;
+  top: 0.5rem;
+  left: 5rem;
 }
 </style>

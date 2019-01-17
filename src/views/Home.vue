@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <!-- 轮播图 -->
     <cube-slide :data="slide" :interval="3000">
       <cube-slide-item v-for="item in slide" :key="item.id">
         <router-link to="/cart">
@@ -7,6 +8,8 @@
         </router-link>
       </cube-slide-item>
     </cube-slide>
+
+    <!-- 过滤按钮 -->
     <cube-button @click="showDrawer">过滤</cube-button>
     <cube-drawer
       ref="drawer"
@@ -14,20 +17,22 @@
       :data="[selectLable]"
       @select="changeHandler"
     ></cube-drawer>
-    <ul>
-      <li v-for="item in selectedData" :key="item.id">
-        {{ item.title }}
-      </li>
-    </ul>
+
+    <!-- 商品列表 -->
+    <div>
+      <goods-list :goodsList="selectedData"></goods-list>
+    </div>
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+import HelloWorld from "@/components/HelloWorld.vue"
+import goodsList from '@/components/goodsList.vue'
 
 const labels = {
+  all: "全部",
   fe: "前端",
   python: "Python",
   java: "Java",
@@ -38,7 +43,8 @@ const labels = {
 export default {
   name: "home",
   components: {
-    HelloWorld
+    HelloWorld,
+    goodsList
   },
   data() {
     return {
@@ -52,16 +58,19 @@ export default {
     const res = await this.$http.get("/api/goods", {
       params: { id: 1, foo: "bar" }
     });
-    console.log(res);
     const { slider, keys, data } = res.data;
     this.slide = slider;
     this.goods = data;
-    this.keys = keys;
+    this.keys = ['all'].concat(keys);
     this.selectedKeys = keys;
   },
   computed: {
     selectedData() {
       let list = [];
+      if (this.selectedKeys.find(v => v=='all') ) {
+        this.selectedKeys = [...this.keys]
+        this.selectedKeys = this.selectedKeys.slice(1)
+      }
       this.selectedKeys.forEach(v => {
         list = list.concat(this.goods[v]);
       });
@@ -78,7 +87,7 @@ export default {
   },
   methods: {
     changeHandler(val) {
-      this.selectedKeys = [...val];
+      this.selectedKeys = [...val]
     },
     showDrawer() {
       this.$refs.drawer.show()
